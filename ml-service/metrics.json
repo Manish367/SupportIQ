@@ -1,0 +1,111 @@
+{
+  "note": "Check data/tickets.csv is the converted real dataset, not the synthetic starter set.",
+  "n_train": 11435,
+  "n_val": 2451,
+  "n_test": 2451,
+  "classes": [
+    "billing_and_payments",
+    "customer_service",
+    "general_inquiry",
+    "human_resources",
+    "it_support",
+    "product_support",
+    "returns_and_exchanges",
+    "sales_and_pre_sales",
+    "service_outages_and_maintenance",
+    "technical_support"
+  ],
+  "confidence_threshold": 0.69,
+  "threshold_accuracy_target": 0.9,
+  "ood_similarity_threshold": 0.193,
+  "test": {
+    "macro_f1": 0.6948,
+    "accuracy": 0.6948,
+    "coverage_at_threshold": 0.4598,
+    "accepted_accuracy": 0.9006,
+    "review_queue_error_rate": 0.4804
+  },
+  "majority_class_baseline_accuracy": 0.2897,
+  "per_class_report": {
+    "billing_and_payments": {
+      "precision": 0.9155555555555556,
+      "recall": 0.8619246861924686,
+      "f1-score": 0.8879310344827587,
+      "support": 239.0
+    },
+    "customer_service": {
+      "precision": 0.613941018766756,
+      "recall": 0.6343490304709142,
+      "f1-score": 0.6239782016348774,
+      "support": 361.0
+    },
+    "general_inquiry": {
+      "precision": 0.8823529411764706,
+      "recall": 0.4166666666666667,
+      "f1-score": 0.5660377358490566,
+      "support": 36.0
+    },
+    "human_resources": {
+      "precision": 0.8536585365853658,
+      "recall": 0.6730769230769231,
+      "f1-score": 0.7526881720430108,
+      "support": 52.0
+    },
+    "it_support": {
+      "precision": 0.6156716417910447,
+      "recall": 0.565068493150685,
+      "f1-score": 0.5892857142857143,
+      "support": 292.0
+    },
+    "product_support": {
+      "precision": 0.6408730158730159,
+      "recall": 0.7006507592190889,
+      "f1-score": 0.6694300518134715,
+      "support": 461.0
+    },
+    "returns_and_exchanges": {
+      "precision": 0.7529411764705882,
+      "recall": 0.5203252032520326,
+      "f1-score": 0.6153846153846154,
+      "support": 123.0
+    },
+    "sales_and_pre_sales": {
+      "precision": 0.6753246753246753,
+      "recall": 0.6753246753246753,
+      "f1-score": 0.6753246753246753,
+      "support": 77.0
+    },
+    "service_outages_and_maintenance": {
+      "precision": 0.8571428571428571,
+      "recall": 0.84,
+      "f1-score": 0.8484848484848485,
+      "support": 100.0
+    },
+    "technical_support": {
+      "precision": 0.6946264744429882,
+      "recall": 0.7464788732394366,
+      "f1-score": 0.7196198234894773,
+      "support": 710.0
+    },
+    "accuracy": 0.6948184414524684,
+    "macro avg": {
+      "precision": 0.7502087893129318,
+      "recall": 0.6633865310592891,
+      "f1-score": 0.6948164872792506,
+      "support": 2451.0
+    },
+    "weighted avg": {
+      "precision": 0.6998510250234614,
+      "recall": 0.6948184414524684,
+      "f1-score": 0.6940588907156805,
+      "support": 2451.0
+    }
+  },
+  "priority_experiment": {
+    "macro_f1": 0.7109,
+    "accuracy": 0.7177,
+    "majority_baseline_macro_f1": 0.1943,
+    "majority_baseline_accuracy": 0.4113,
+    "note": "Priority is used by the app only if this clearly beats the majority baseline."
+  }
+}

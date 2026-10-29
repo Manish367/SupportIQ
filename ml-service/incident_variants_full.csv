@@ -1,0 +1,57 @@
+variant,cluster_distance,precision,recall,f1,ari
+current: tfidf + category probs,0.3,0.0,0.0,0.0,0.0
+current: tfidf + category probs,0.35,0.0,0.0,0.0,-0.003
+current: tfidf + category probs,0.4,0.4,0.056,0.098,0.085
+current: tfidf + category probs,0.45,0.4,0.111,0.174,0.153
+current: tfidf + category probs,0.5,0.4,0.167,0.235,0.209
+current: tfidf + category probs,0.55,0.407,0.306,0.349,0.316
+current: tfidf + category probs,0.6,0.188,0.361,0.248,0.187
+current: tfidf + category probs,0.65,0.105,0.556,0.176,0.089
+current: tfidf + category probs,0.7,0.075,0.611,0.133,0.035
+current: tfidf + category probs,0.75,0.069,0.806,0.127,0.024
+current: tfidf + category probs,0.8,0.057,1.0,0.108,0.0
+current: tfidf + category probs,0.85,0.057,1.0,0.108,0.0
+current: tfidf + category probs,0.9,0.057,1.0,0.108,0.0
+current: tfidf + category probs,0.95,0.057,1.0,0.108,0.0
+tfidf only,0.3,0.0,0.0,0.0,0.0
+tfidf only,0.35,0.0,0.0,0.0,0.0
+tfidf only,0.4,0.0,0.0,0.0,0.0
+tfidf only,0.45,0.0,0.0,0.0,0.0
+tfidf only,0.5,0.0,0.0,0.0,0.0
+tfidf only,0.55,0.0,0.0,0.0,0.0
+tfidf only,0.6,1.0,0.028,0.054,0.051
+tfidf only,0.65,0.75,0.083,0.15,0.14
+tfidf only,0.7,0.714,0.139,0.233,0.218
+tfidf only,0.75,0.556,0.139,0.222,0.204
+tfidf only,0.8,0.583,0.194,0.292,0.271
+tfidf only,0.85,0.667,0.333,0.444,0.422
+tfidf only,0.9,0.5,0.361,0.419,0.39
+tfidf only,0.95,0.37,0.472,0.415,0.375
+LSA only,0.3,0.0,0.0,0.0,-0.006
+LSA only,0.35,0.0,0.0,0.0,-0.009
+LSA only,0.4,0.0,0.0,0.0,-0.012
+LSA only,0.45,0.143,0.028,0.047,0.028
+LSA only,0.5,0.333,0.083,0.133,0.113
+LSA only,0.55,0.273,0.083,0.128,0.104
+LSA only,0.6,0.357,0.139,0.2,0.174
+LSA only,0.65,0.333,0.139,0.196,0.168
+LSA only,0.7,0.312,0.139,0.192,0.163
+LSA only,0.75,0.333,0.25,0.286,0.249
+LSA only,0.8,0.257,0.25,0.254,0.209
+LSA only,0.85,0.2,0.306,0.242,0.185
+LSA only,0.9,0.167,0.444,0.242,0.174
+LSA only,0.95,0.079,0.917,0.146,0.045
+LSA + tfidf,0.3,0.0,0.0,0.0,0.0
+LSA + tfidf,0.35,0.0,0.0,0.0,-0.003
+LSA + tfidf,0.4,0.0,0.0,0.0,-0.006
+LSA + tfidf,0.45,0.0,0.0,0.0,-0.009
+LSA + tfidf,0.5,0.0,0.0,0.0,-0.012
+LSA + tfidf,0.55,0.167,0.028,0.048,0.032
+LSA + tfidf,0.6,0.273,0.083,0.128,0.104
+LSA + tfidf,0.65,0.308,0.111,0.163,0.137
+LSA + tfidf,0.7,0.333,0.139,0.196,0.168
+LSA + tfidf,0.75,0.316,0.167,0.218,0.186
+LSA + tfidf,0.8,0.29,0.25,0.269,0.228
+LSA + tfidf,0.85,0.257,0.25,0.254,0.209
+LSA + tfidf,0.9,0.153,0.306,0.204,0.138
+LSA + tfidf,0.95,0.099,0.611,0.17,0.079

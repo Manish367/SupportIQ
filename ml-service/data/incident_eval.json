@@ -1,0 +1,43 @@
+{
+  "note": "Hand-written benchmark. Each group = tickets describing ONE underlying problem in different words. 'unrelated' = tickets that belong to no group. Add your own examples and wordings so the benchmark is not tailored to the model.",
+  "groups": [
+    ["Hi, new orders are not syncing to our scheduling system since this morning. Please help.",
+     "Our route planner is missing the jobs we created today and nothing shows up for the drivers.",
+     "Hello, work orders are not reaching the dispatcher and the integration looks offline.",
+     "The connection between our order system and the scheduler seems broken, new jobs are not arriving."],
+    ["Nobody on my team can sign in this morning, the login page keeps sending us back to the start.",
+     "Single sign-on is stuck in a redirect loop and we cannot access the application.",
+     "I get an invalid token error every time I try to log in with my company account.",
+     "The sign in page just spins forever for all of our users after entering credentials."],
+    ["Customer card payments are failing at checkout since noon, every attempt is declined.",
+     "Our payment page shows a server error when customers try to pay for their orders.",
+     "Transactions are not going through and people cannot complete their purchases.",
+     "Checkout is rejecting every credit card we try, this started a few hours ago."],
+    ["Password reset emails never arrive for any of our users.",
+     "We have received no notification emails since yesterday afternoon.",
+     "Customers say they are not getting confirmation mails after placing an order.",
+     "Email delivery seems to be broken, nothing from the platform reaches our inboxes."],
+    ["The mobile app crashes immediately on launch after the latest update.",
+     "Since updating, the app closes itself right after I open it on my Android phone.",
+     "After the new version installed the iPhone app freezes on the splash screen.",
+     "Opening the app force closes it every time since this morning's release."],
+    ["The dashboard takes several minutes to load today, it was fast last week.",
+     "The reports page is extremely slow and often times out.",
+     "Everything in the platform is lagging badly and pages hang before they finish loading.",
+     "Our analytics screen never finishes loading, we only see a spinner."]
+  ],
+  "unrelated": [
+    "Could you send me a copy of last month's invoice for our accounting department?",
+    "We would like a quote for fifty licenses for the enterprise plan.",
+    "How many vacation days do I have left this year?",
+    "It would be great if you added a dark mode to the interface.",
+    "I want to return the keyboard I bought last week, how do I start the process?",
+    "Please change the email address on my account to my new work address.",
+    "What are your opening hours over the holiday period?",
+    "How do I set up the VPN on my new laptop?",
+    "I need to update the billing address for my company.",
+    "Is it possible to export all my data to a spreadsheet?",
+    "Please delete my personal data from your systems.",
+    "Do you offer a training session for new team members?"
+  ]
+}

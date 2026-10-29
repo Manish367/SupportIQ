@@ -1,0 +1,25 @@
+# dependencies, virtual environments, build output
+node_modules
+dist
+.venv*
+venv
+__pycache__
+*.pyc
+
+# secrets: never commit these (the .env.example templates are fine)
+.env
+.env.*
+!.env.example
+
+# trained model (rebuilt by train.py)
+*.joblib
+
+# dataset files: large, and the dataset license is non-commercial
+ml-service/data/*.csv
+ml-service/data/*.parquet
+
+# logs and OS/editor junk
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
