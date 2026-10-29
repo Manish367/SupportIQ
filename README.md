@@ -355,4 +355,4 @@ Run from `ml-service/` with the virtual environment active.
 ## Credits and license
 - Dataset: Tobi-Bueck/customer-support-tickets (CC BY-NC 4.0). Please cite it as described on the dataset page.
 - UI layout inspired by the "Aivia" AI customer-support dashboard concept on Dribbble.
-- Code license: TODO (choose one, for example MIT). The dataset's non-commercial license still applies to the data and to models trained on it.
+- Code license: The dataset's non-commercial license still applies to the data and to models trained on it.
