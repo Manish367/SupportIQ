@@ -1,5 +1,5 @@
 const base = process.env.ML_SERVICE_URL || "http://localhost:8000";
-async function call(path, body, ms = 8000) {
+async function call(path, body, ms = 60000) {
   const ctl = new AbortController();
   const t = setTimeout(() => ctl.abort(), ms);
   try {
@@ -20,5 +20,5 @@ async function call(path, body, ms = 8000) {
 }
 export const predict = (text) => call("/predict", { text });
 export const findIncidents = (tickets) =>
-  call("/incidents", { tickets }, 15000);
+  call("/incidents", { tickets }, 60000);
 export const mlHealth = () => call("/health");

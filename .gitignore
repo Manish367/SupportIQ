@@ -13,6 +13,7 @@ __pycache__
 
 # trained model (rebuilt by train.py)
 *.joblib
+!ml-service/model.joblib
 
 # dataset files: large, and the dataset license is non-commercial
 ml-service/data/*.csv
