@@ -7,6 +7,7 @@ import { Ticket } from "./models.js";
 import { predict, findIncidents, mlHealth } from "./ml.js";
 
 const app = express();
+app.set("trust proxy", 1);
 app.use(cors({ origin: (process.env.CORS_ORIGIN || "").split(",") }));
 app.use(express.json({ limit: "20kb" }));
 app.use("/api", rateLimit({ windowMs: 60_000, limit: 120 }));
