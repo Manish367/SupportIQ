@@ -2,7 +2,7 @@
 
 Support-ticket triage with machine learning. SupportIQ predicts a ticket's category and priority, shows how confident the model is, sends uncertain tickets to a human review queue, learns from agent corrections, and runs **Incident Radar**, which flags groups of similar recent tickets that may share one cause. An agent decides whether they do; the system never claims a root cause.
 
-> **Status:** works end to end locally (React + Express + FastAPI + MongoDB Atlas). Not deployed yet. TODO: live demo URL, screenshots in `docs/`.
+> **Status:** deployed. Live demo: https://support-iq-beta.vercel.app. Hosted on free tiers, so the first load after a quiet period can take about a minute while the services wake up. API health check: https://supportiq-1.onrender.com/api/health. Screenshots in `docs/` (TODO).
 
 ## Contents
 1. [Features](#features)
@@ -320,12 +320,13 @@ Run from `ml-service/` with the virtual environment active.
 
 ## Deployment
 
-**Status: not deployed yet.** Planned: MongoDB Atlas (free tier, network access open for the hosts, since free hosts have no fixed IPs), Render for the API and ML service, Vercel for the frontend (`vercel.json` makes page refreshes on client routes work).
+**Live:** frontend on Vercel, API and ML service on Render (free instances), database on MongoDB Atlas (free tier).
 
-- Set the same `ML_API_KEY` on the API and the ML service, `CORS_ORIGIN` to the Vercel URL, and `VITE_API_URL` to the API URL.
-- The dataset CSV is not committed (size and license), so the hosted ML service needs a build step that obtains the data and trains the model. The current `render.yaml` still contains the original synthetic-data build; update it before deploying. TODO: finalize and document this step.
-- Free instances sleep when idle, so the first request after a pause can take about 30 seconds.
-- Live URLs: TODO.
+- **ML service** (Render web service, root `ml-service`, Python 3.14.3): build `pip install -r requirements.txt`, start `uvicorn app:app --host 0.0.0.0 --port $PORT`. The trained model (`ml-service/model.joblib`) is committed to the repository so the host does not need the dataset, and `requirements.txt` pins the exact versions it was trained with. `/predict` and `/incidents` require the `ML_API_KEY` secret.
+- **API** (Render web service, root `backend`): build `npm install`, start `npm start`. Environment: `MONGODB_URI`, `ML_SERVICE_URL`, `ML_API_KEY` (same value as the ML service), `CORS_ORIGIN` (the Vercel URL). It trusts Render's proxy so the rate limiter sees real client addresses, and waits up to 60 seconds for the ML service to wake.
+- **Frontend** (Vercel, root `frontend`): environment `VITE_API_URL` = the API URL (set before building, since Vite embeds it).
+- **Atlas:** network access is open to all addresses because free Render instances have no fixed IP, so the database password is the protection.
+- **Free-tier behavior:** services sleep after 15 minutes without traffic and take about a minute to wake. To retrain, rerun `prepare_data.py` and `train.py` locally and commit the new `model.joblib`.
 
 ## Troubleshooting
 - **`pip install` fails building scikit-learn on a very new Python:** `pip install --only-binary=:all: fastapi "uvicorn[standard]" scikit-learn pandas joblib numpy`.
