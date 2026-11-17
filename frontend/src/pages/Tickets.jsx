@@ -37,7 +37,8 @@ export default function Tickets() {
     [err, setErr] = useState(""),
     [sel, setSel] = useState(null),
     [page, setPage] = useState(1),
-    [incs, setIncs] = useState([]);
+    [incs, setIncs] = useState([]),
+    [open, setOpen] = useState(false);
   const qs = sp.toString();
   const load = useCallback(() => {
     const p = new URLSearchParams(qs);
@@ -56,6 +57,7 @@ export default function Tickets() {
   }, [load]);
   useEffect(() => {
     setPage(1);
+    setOpen(false);
   }, [qs, q]);
   useEffect(() => {
     api
@@ -63,6 +65,19 @@ export default function Tickets() {
       .then((r) => setIncs(r.incidents))
       .catch(() => {});
   }, []);
+  // on phones the ticket detail is a full-screen sheet: lock page scroll while it is open, close with Escape
+  useEffect(() => {
+    document.body.classList.toggle(
+      "no-scroll",
+      open && matchMedia("(max-width: 1100px)").matches,
+    );
+    const k = (e) => e.key === "Escape" && setOpen(false);
+    addEventListener("keydown", k);
+    return () => {
+      removeEventListener("keydown", k);
+      document.body.classList.remove("no-scroll");
+    };
+  }, [open]);
   const cur = useMemo(
     () => rows?.find((t) => t._id === sel) || rows?.[0] || null,
     [rows, sel],
@@ -72,6 +87,10 @@ export default function Tickets() {
       .update(id, b)
       .then(load)
       .catch((e) => setErr(e.message));
+  const pick = (id) => {
+    setSel(id);
+    setOpen(true);
+  };
   const pages = Math.max(1, Math.ceil((rows?.length || 0) / PER)),
     slice = rows?.slice((page - 1) * PER, page * PER) || [];
   const incOf = cur && incs.find((i) => i.ticketIds.includes(cur._id));
@@ -113,20 +132,19 @@ export default function Tickets() {
           {!rows && !err && <p className="muted pad">Loading tickets…</p>}
           {rows?.length === 0 && (
             <p className="muted pad">
-              No tickets match. Clear a filter in the sidebar or create a
-              ticket.
+              No tickets match. Clear a filter in the menu or create a ticket.
             </p>
           )}
           {slice.map((t) => (
             <button
               key={t._id}
               className={`trow ${cur?._id === t._id ? "sel" : ""}`}
-              onClick={() => setSel(t._id)}
+              onClick={() => pick(t._id)}
             >
               <span className="id">{code(t)}</span>
               <span className="title">
                 <Flag p={t.priority} />
-                {t.subject}
+                <span className="t">{t.subject}</span>
                 {t.prediction?.needsReview && !t.reviewed && (
                   <em className="review-dot" title="Needs review" />
                 )}
@@ -154,12 +172,22 @@ export default function Tickets() {
         </footer>
       </section>
 
-      <aside className="glass detail" aria-label="Ticket details">
+      <aside
+        className={`glass detail ${open ? "open" : ""}`}
+        aria-label="Ticket details"
+      >
         {!cur ? (
           <p className="muted pad">Select a ticket to see its details.</p>
         ) : (
           <div className="detail-in" key={cur._id}>
             <div className="d-top">
+              <button
+                className="d-back"
+                onClick={() => setOpen(false)}
+                aria-label="Back to ticket list"
+              >
+                ‹ Back
+              </button>
               <b>{code(cur)}</b>
               <span className={`pill ${ST[cur.status][1]}`}>
                 {ST[cur.status][0]}

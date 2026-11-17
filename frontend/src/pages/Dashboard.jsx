@@ -23,8 +23,26 @@ const COLORS = [
   "#b0b8d4",
 ];
 const PRI = { low: "#5df2b5", medium: "#ffc36b", high: "#ff7a90" };
+const TIP = {
+  background: "#fff",
+  border: "1px solid #dfe3f5",
+  borderRadius: 12,
+};
+
+function useNarrow(q = "(max-width: 1100px)") {
+  // phones and tablets: simple CSS bars instead of the wide chart
+  const [n, setN] = useState(() => matchMedia(q).matches);
+  useEffect(() => {
+    const m = matchMedia(q),
+      f = () => setN(m.matches);
+    m.addEventListener("change", f);
+    return () => m.removeEventListener("change", f);
+  }, [q]);
+  return n;
+}
 
 export default function Dashboard() {
+  const narrow = useNarrow();
   const [a, setA] = useState(null),
     [inc, setInc] = useState(null),
     [err, setErr] = useState(""),
@@ -46,10 +64,10 @@ export default function Dashboard() {
       </div>
     );
   if (!a) return <div className="glass main wide pane">Loading dashboard…</div>;
-  const cats = a.byCategory.map((c) => ({
-    ...c,
-    label: CATS[c.name] || c.name,
-  }));
+  const cats = a.byCategory
+    .map((c) => ({ ...c, label: CATS[c.name] || c.name }))
+    .sort((x, y) => y.count - x.count);
+  const max = Math.max(1, ...cats.map((c) => c.count));
   return (
     <div className="main wide scroll">
       <div className="grid-world">
@@ -118,12 +136,36 @@ export default function Dashboard() {
             <span className="num">{a.reviewQueue}</span>
             <span className="muted">Waiting for review</span>
           </div>
-          <Link to="/tickets?review=true">Open review queue</Link>
+          <Link to="/tickets?review=true">Review queue</Link>
         </Tilt>
 
         <Tilt className="chart">
           <h2 className="lift">Tickets by predicted category</h2>
-          {cats.length ? (
+          {!cats.length ? (
+            <p className="muted">
+              No tickets yet.{" "}
+              <Link to="/tickets/new">Create the first one</Link>.
+            </p>
+          ) : narrow ? (
+            <div className="hbars">
+              {cats.map((c, i) => (
+                <div className="hbar" key={c.name}>
+                  <div className="hbar-top">
+                    <span>{c.label}</span>
+                    <b>{c.count}</b>
+                  </div>
+                  <div className="hbar-track">
+                    <div
+                      style={{
+                        width: `${(c.count / max) * 100}%`,
+                        background: COLORS[i % 6],
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
             <ResponsiveContainer width="100%" height={340}>
               <BarChart data={cats} layout="vertical" margin={{ left: 20 }}>
                 <XAxis type="number" allowDecimals={false} stroke="#5d6485" />
@@ -133,13 +175,7 @@ export default function Dashboard() {
                   width={210}
                   stroke="#5d6485"
                 />
-                <Tooltip
-                  contentStyle={{
-                    background: "#fff",
-                    border: "1px solid #dfe3f5",
-                    borderRadius: 12,
-                  }}
-                />
+                <Tooltip contentStyle={TIP} />
                 <Bar dataKey="count" radius={8}>
                   {cats.map((_, i) => (
                     <Cell key={i} fill={COLORS[i % 6]} />
@@ -147,47 +183,44 @@ export default function Dashboard() {
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
-          ) : (
-            <p className="muted">
-              No tickets yet.{" "}
-              <Link to="/tickets/new">Create the first one</Link>.
-            </p>
           )}
         </Tilt>
 
         <Tilt className="chart">
           <h2 className="lift">Priority breakdown</h2>
           {a.byPriority.length ? (
-            <ResponsiveContainer width="100%" height={230}>
-              <PieChart>
-                <Pie
-                  data={a.byPriority}
-                  dataKey="count"
-                  nameKey="name"
-                  innerRadius={55}
-                  outerRadius={85}
-                  paddingAngle={4}
-                  label={({ name }) => name}
-                >
-                  {a.byPriority.map((p) => (
-                    <Cell key={p.name} fill={PRI[p.name] || "#b0b8d4"} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{
-                    background: "#fff",
-                    border: "1px solid #dfe3f5",
-                    borderRadius: 12,
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
+            <>
+              <ResponsiveContainer width="100%" height={narrow ? 190 : 230}>
+                <PieChart>
+                  <Pie
+                    data={a.byPriority}
+                    dataKey="count"
+                    nameKey="name"
+                    innerRadius={narrow ? 48 : 55}
+                    outerRadius={narrow ? 72 : 85}
+                    paddingAngle={4}
+                  >
+                    {a.byPriority.map((p) => (
+                      <Cell key={p.name} fill={PRI[p.name] || "#b0b8d4"} />
+                    ))}
+                  </Pie>
+                  <Tooltip contentStyle={TIP} />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="legend">
+                {a.byPriority.map((p) => (
+                  <span key={p.name}>
+                    <i style={{ background: PRI[p.name] || "#b0b8d4" }} />
+                    {p.name} {p.count}
+                  </span>
+                ))}
+              </div>
+            </>
           ) : (
             <p className="muted">No data yet.</p>
           )}
           <p className="muted small">
-            Priority is set by the person filing the ticket. There is no trained
-            priority model yet.
+            Priority is predicted by the model unless a person sets it.
           </p>
         </Tilt>
 

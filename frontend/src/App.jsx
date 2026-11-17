@@ -13,7 +13,23 @@ import Tickets from "./pages/Tickets.jsx";
 import { api, CATS, useCategories } from "./api.js";
 
 const Dot = ({ c }) => <i className="dot" style={{ background: c }} />;
-function Sidebar() {
+const Icon = ({ d }) => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d={d} />
+  </svg>
+);
+
+function Sidebar({ open, onClose }) {
   const cats = useCategories();
   const [a, setA] = useState(null);
   const [sp] = useSearchParams();
@@ -38,10 +54,20 @@ function Sidebar() {
     </Link>
   );
   return (
-    <aside className="side glass">
+    <aside
+      className={`side glass ${open ? "open" : ""}`}
+      aria-label="Navigation and filters"
+    >
       <div className="logo">
         <span className="logo-mark" />
         SupportIQ
+        <button
+          className="side-close"
+          onClick={onClose}
+          aria-label="Close menu"
+        >
+          ×
+        </button>
       </div>
       <nav className="side-nav" aria-label="Main">
         <NavLink to="/" end>
@@ -59,6 +85,13 @@ function Sidebar() {
         <NavLink to="/tickets/new">New ticket</NavLink>
       </nav>
       <p className="side-h">Views</p>
+      <Link
+        to="/tickets"
+        className={`side-link side-all ${loc.pathname === "/tickets" && !sp.toString() ? "on" : ""}`}
+      >
+        <span>All tickets</span>
+        {a && <b>{a.total}</b>}
+      </Link>
       {item("status", "open", "Open", n(a?.byStatus, "open"))}
       {item(
         "status",
@@ -97,10 +130,16 @@ function Sidebar() {
 }
 
 export default function App() {
-  const stage = useRef(null);
+  const stage = useRef(null),
+    loc = useLocation();
+  const [navOpen, setNavOpen] = useState(false);
   const move = (e) => {
-    // background layers shift with the pointer to give the scene depth
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // background layers shift with the mouse pointer to give the scene depth (not on touch)
+    if (
+      e.pointerType !== "mouse" ||
+      matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      return;
     stage.current.style.setProperty(
       "--px",
       (e.clientX / innerWidth - 0.5).toFixed(3),
@@ -110,6 +149,21 @@ export default function App() {
       (e.clientY / innerHeight - 0.5).toFixed(3),
     );
   };
+  useEffect(() => {
+    setNavOpen(false);
+  }, [loc.pathname, loc.search]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [loc.pathname]);
+  useEffect(() => {
+    document.body.classList.toggle("no-scroll", navOpen);
+    const k = (e) => e.key === "Escape" && setNavOpen(false);
+    addEventListener("keydown", k);
+    return () => {
+      removeEventListener("keydown", k);
+      document.body.classList.remove("no-scroll");
+    };
+  }, [navOpen]);
   return (
     <div className="stage" ref={stage} onPointerMove={move}>
       <div className="orbs" aria-hidden="true">
@@ -117,8 +171,25 @@ export default function App() {
         <div className="orb o2" />
         <div className="orb o3" />
       </div>
+      <header className="topbar glass">
+        <button
+          className="icon-btn"
+          onClick={() => setNavOpen(true)}
+          aria-label="Open menu and filters"
+        >
+          <Icon d="M4 6h16M4 12h16M4 18h16" />
+        </button>
+        <span className="logo">
+          <span className="logo-mark" />
+          SupportIQ
+        </span>
+        <Link to="/tickets/new" className="top-new" aria-label="New ticket">
+          <Icon d="M12 5v14M5 12h14" />
+        </Link>
+      </header>
+      {navOpen && <div className="scrim" onClick={() => setNavOpen(false)} />}
       <div className="shell">
-        <Sidebar />
+        <Sidebar open={navOpen} onClose={() => setNavOpen(false)} />
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/tickets" element={<Tickets />} />
@@ -133,6 +204,20 @@ export default function App() {
           />
         </Routes>
       </div>
+      <nav className="tabbar glass" aria-label="Main">
+        <NavLink to="/" end>
+          <Icon d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z" />
+          <span>Dashboard</span>
+        </NavLink>
+        <NavLink to="/tickets" end>
+          <Icon d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+          <span>Tickets</span>
+        </NavLink>
+        <NavLink to="/tickets/new">
+          <Icon d="M12 5v14M5 12h14" />
+          <span>New</span>
+        </NavLink>
+      </nav>
     </div>
   );
 }
