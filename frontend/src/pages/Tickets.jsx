@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { api, CATS, pct, useCategories } from "../api.js";
+import { ListSkeleton } from "../components/Loading.jsx";
 
 const ST = {
   open: ["Open", "s-open"],
@@ -129,7 +130,7 @@ export default function Tickets() {
               {err}
             </p>
           )}
-          {!rows && !err && <p className="muted pad">Loading tickets…</p>}
+          {!rows && !err && <ListSkeleton />}
           {rows?.length === 0 && (
             <p className="muted pad">
               No tickets match. Clear a filter in the menu or create a ticket.

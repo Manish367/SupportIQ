@@ -14,6 +14,7 @@ import {
 import { api, CATS, pct } from "../api.js";
 import Tilt from "../components/Tilt.jsx";
 import Radar from "../components/Radar.jsx";
+import { DashboardSkeleton } from "../components/Loading.jsx";
 const COLORS = [
   "#7c5cff",
   "#3de0ff",
@@ -60,10 +61,13 @@ export default function Dashboard() {
   if (err)
     return (
       <div className="glass main wide pane err" role="alert">
-        {err}
+        {err} 
+        <button className="btn-soft" onClick={() => location.reload()}>
+          Try again
+        </button>
       </div>
     );
-  if (!a) return <div className="glass main wide pane">Loading dashboard…</div>;
+  if (!a) return <DashboardSkeleton />;
   const cats = a.byCategory
     .map((c) => ({ ...c, label: CATS[c.name] || c.name }))
     .sort((x, y) => y.count - x.count);
